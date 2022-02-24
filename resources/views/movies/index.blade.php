@@ -1,0 +1,58 @@
+@extends('layouts.app')
+
+@section('title', 'Movie Index' )
+
+@section('content')
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="float-left">
+            <h2>Movie Index</h2>
+        </div>
+
+        <div class="float-right">
+            <a class="btn btn-success" href="{{ route('movies.create') }}"> Create New Movie</a>
+        </div>
+    </div>
+</div>
+<br>
+@if ($message = Session::get('success'))
+    <div class="alert alert-success">
+        <p>{{ $message }}</p>
+    </div>
+@endif
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Movie Title</th>
+        <th>Description</th>
+        <th>Release Date</th>
+        <th>Run Time</th>
+        <th>Rating</th>
+        <th width="280px">Action</th>
+    </tr>
+    @foreach ($movies as $movie)
+    <tr>
+        <td>{{ $movie->id }}</td>
+        <td>{{ $movie->title }}</td>
+        <td>{{ $movie->description }}</td>
+        <td>{{ $movie->releasedate }}</td>
+        <td>{{ $movie->runtime }}</td>
+        <td>{{ $movie->rating }}</td>
+        <td>
+            <form action="{{ route('movies.destroy',$movie->id) }}" method="POST">
+                <a class="btn btn-info" href="{{ route('movies.show',$movie->id) }}">Show</a>
+                <a class="btn btn-primary" href="{{ route('movies.edit',$movie->id) }}">Edit</a>
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    @endforeach
+
+</table>
+{{ $movies->links() }}
+
+@endsection
